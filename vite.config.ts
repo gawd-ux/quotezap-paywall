@@ -11,5 +11,5 @@ const __dirname = path.dirname(__filename);
 // https://vite.dev/config/
 export default defineConfig({
   base: "./", // ✅ RELATIVE PATH (this fixes everything)
-  plugins: [react(), tailwindcss(), viteSingleFile()],
+  plugins: [react(), tailwindcss()],
 });

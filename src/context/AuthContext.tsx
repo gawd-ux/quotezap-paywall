@@ -56,7 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-
   const loadProfile = async (u: User) => {
     const ref = doc(db, "users", u.uid);
     const snap = await getDoc(ref);
@@ -85,18 +84,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) await loadProfile(user);
   };
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      if (u) {
-        await loadProfile(u);
-      } else {
-        setProfile(null);
-      }
-      setLoading(false);
-    });
-    return () => unsub();
-  }, []);
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setUser(user);
+    setLoading(false);
+  });
+
+  return unsubscribe;
+}, []);
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
@@ -164,5 +159,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     hasAccess
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user }}> {!loading && children}
+</AuthContext.Provider>
 }
