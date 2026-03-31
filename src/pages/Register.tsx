@@ -23,19 +23,19 @@ export default function Register() {
     if (password !== confirm) return setError("Passwords do not match");
     setLoading(true);
     try {
-const userCredential = await register(email, password);
-const user = userCredential.user;
+  const userCredential = await register(email, password);
+  const user = userCredential.user;
 
-await setDoc(doc(db, "users", user.uid), {
-  uid: user.uid,
-  email: user.email,
-  trialStart: new Date(),
-  trialEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  subscriptionStatus: "trial",
-  createdAt: new Date(),
-});
+  await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    email: user.email,
+    trialStart: new Date(),
+    trialEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    subscriptionStatus: "trial",
+    createdAt: new Date(),
+  });
 
-navigate("/dashboard", { replace: true });
+  navigate("/dashboard", { replace: true });
     } catch (err: any) {
       setError(err.message || "Failed to create account");
     } finally {
