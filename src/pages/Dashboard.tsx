@@ -1,4 +1,6 @@
+import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 import Header from "../components/layout/Header";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
@@ -23,10 +25,17 @@ export default function Dashboard() {
   const { user, profile, logout, trialDaysLeft, isTrialActive, isSubscribed, hasAccess } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/", { replace: true });
-  };
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+    navigate("/login", { replace: true });
+  } catch (err) {
+    console.error("Logout error:", err);
+  }
+};
 
   const handleOpenApp = () => {
     if (hasAccess) {
