@@ -10,9 +10,6 @@ export default function Dashboard() {
   const { user, profile, logout, trialDaysLeft, isTrialActive, isSubscribed, hasAccess } = useAuth();
   const navigate = useNavigate();
 
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-
 const handleLogout = async () => {
   try {
     await signOut(auth);
