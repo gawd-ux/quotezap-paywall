@@ -1,25 +1,10 @@
-import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import Header from "../components/layout/Header";
 import Button from "../components/ui/Button";
-import { useAuth } from "../context/AuthContext";
 import { redirectToCheckout } from "../utils/stripe";
-
-function StatusPill({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    trial: "bg-amber-100 text-amber-900 border-amber-300",
-    active: "bg-green-100 text-green-900 border-green-300",
-    expired: "bg-red-100 text-red-900 border-red-300",
-    none: "bg-zinc-100 text-zinc-800 border-zinc-300"
-  };
-  return (
-    <span className={`inline-flex items-center gap-2 rounded-full border-2 px-3 py-1 text-sm font-extrabold ${map[status] || map.none}`}>
-      <span className="h-2 w-2 rounded-full bg-current" />
-      {status.toUpperCase()}
-    </span>
-  );
-}
 
 export default function Dashboard() {
   const { user, profile, logout, trialDaysLeft, isTrialActive, isSubscribed, hasAccess } = useAuth();
@@ -36,7 +21,20 @@ const handleLogout = async () => {
     console.error("Logout error:", err);
   }
 };
-
+function StatusPill({ status }: { status: string }) {
+  const map: Record<string, string> = {
+    trial: "bg-amber-100 text-amber-900 border-amber-300",
+    active: "bg-green-100 text-green-900 border-green-300",
+    expired: "bg-red-100 text-red-900 border-red-300",
+    none: "bg-zinc-100 text-zinc-800 border-zinc-300"
+  };
+  return (
+    <span className={`inline-flex items-center gap-2 rounded-full border-2 px-3 py-1 text-sm font-extrabold ${map[status] || map.none}`}>
+      <span className="h-2 w-2 rounded-full bg-current" />
+      {status.toUpperCase()}
+    </span>
+  );
+}
   const handleOpenApp = () => {
     if (hasAccess) {
       navigate("/app", { replace: true });
