@@ -16,7 +16,7 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     if (password.length < 6) return setError("Password must be at least 6 characters");
@@ -37,7 +37,7 @@ await setDoc(doc(db, "users", user.uid), {
 
 navigate("/dashboard", { replace: true });
     } catch (err: any) {
-      setError(err.message || "Failed to create account");
+      setError(err?.message || "Failed to create account");
     } finally {
       setLoading(false);
     }
